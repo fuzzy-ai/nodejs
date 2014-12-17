@@ -32,12 +32,12 @@ class APIServerMock
       agent1
     ]
     routes = [
-      ["GET", "^/user/#{userID}/agents$", (request, response, match) ->
+      ["GET", "^/user/#{userID}/agent$", (request, response, match) ->
         response.statusCode = 200
         response.setHeader "Content-Type", "application/json"
         response.end JSON.stringify(agents)
       ],
-      ["POST", "^/user/#{userID}/agents$", (request, response, match) ->
+      ["POST", "^/user/#{userID}/agent$", (request, response, match) ->
         response.statusCode = 200
         response.setHeader "Content-Type", "application/json"
         # XXX: use body
@@ -66,8 +66,9 @@ class APIServerMock
       auth = request.headers.authorization
       am = auth.match(/^Bearer (.*?)$/)
       if not am or am[1] != token
-        response.statusCode = 404
-        response.end("Cannot #{request.method} #{request.url}")
+        response.statusCode = 400
+        response.setHeader "Content-Type", "application/json"
+        response.end(JSON.stringify({status: "error", message: "Cannot #{request.method} #{request.url}"}))
         return
       # Find a route
       for route in routes
@@ -77,7 +78,8 @@ class APIServerMock
             return route[2](request, response, match)
       # If we get here, no route found
       response.statusCode = 404
-      response.end("Cannot #{request.method} #{request.url}")
+      response.setHeader "Content-Type", "application/json"
+      response.end(JSON.stringify({status: "error", message: "Cannot #{request.method} #{request.url}"}))
 
     @start = (callback) ->
       server.once 'error', (err) ->
