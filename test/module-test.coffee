@@ -55,4 +55,13 @@ vows
               assert.isFunction client.getAgent, "getAgent"
               assert.isFunction client.evaluate, "evaluate"
               assert.isFunction client.putAgent, "putAgent"
+            'and we get the user agents':
+              topic: (client) ->
+                client.getAgents USERID, @callback
+                undefined
+              'it works': (err, agents) ->
+                assert.ifError err
+                assert.isArray agents
+                for agent in agents
+                  assert.isObject agent
   .export(module)
