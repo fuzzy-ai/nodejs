@@ -19,7 +19,8 @@ cmd = (str, callback) ->
 
 build = (callback) ->
   cmd 'coffee -c -o lib src', ->
-    cmd 'coffee -c test'
+    cmd 'coffee -c test', ->
+      callback?()
 
 task 'build', 'Build lib/ from src/', ->
   build()
@@ -41,4 +42,13 @@ task 'clean', 'Clean up extra files', ->
 task 'test', 'Run tests', ->
   invoke 'clean'
   build ->
-    cmd 'vows tests/*-test.js'
+    glob "test/*-test.js", (err, files) ->
+      doNext = (list, callback) ->
+        if list.length == 0
+          callback null
+        else
+          head = list.shift()
+          cmd "vows #{head}", ->
+            doNext list, callback
+      doNext files, () ->
+        a = a
