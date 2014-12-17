@@ -24,4 +24,35 @@ vows
         mock.stop (err) =>
           @callback err
         undefined
+      'and we load the fuzzy.io library':
+        topic: ->
+          try
+            mod = require '../lib/fuzzy.io'
+            @callback null, mod
+          catch err
+            @callback err, null
+          undefined
+        'it works': (err, mod) ->
+          assert.ifError err
+          assert.isFunction mod
+        'and we create a client with the mock address':
+          topic: (FuzzyIOClient) ->
+            try
+              client = new FuzzyIOClient(TOKEN, "http://localhost:2342")
+              @callback null, client
+            catch err
+              @callback err, null
+            undefined
+          'it works': (err, client) ->
+            assert.ifError err
+            assert.isObject client
+          'and we examine the client':
+            topic: (client) ->
+              client
+            'it has the right public methods': (client) ->
+              assert.isFunction client.getAgents, "getAgents"
+              assert.isFunction client.newAgent, "newAgent"
+              assert.isFunction client.getAgent, "getAgent"
+              assert.isFunction client.evaluate, "evaluate"
+              assert.isFunction client.putAgent, "putAgent"
   .export(module)
