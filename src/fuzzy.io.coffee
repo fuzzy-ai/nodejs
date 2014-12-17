@@ -7,9 +7,13 @@ _ = require 'lodash'
 
 class ClientError extends Error
   constructor: (@message, @statusCode) ->
+    @name = "ClientError"
+    Error.captureStackTrace(this, ClientError)
 
 class ServerError extends Error
   constructor: (@message, @statusCode) ->
+    @name = "ServerError"
+    Error.captureStackTrace(this, ServerError)
 
 class FuzzyIOClient
   constructor: (token, apiServer = "https://api.fuzzy.io") ->
@@ -26,12 +30,14 @@ class FuzzyIOClient
           authorization: "Bearer #{token}"
 
       request.post options, (err, response, body) =>
+
         if err
-          callback err
-        else if response.statusCode >= 400 and response.statusCode < 500
-          callback new ClientError(body.message, response.statusCode)
-        else if response.statusCode >= 500 and response.statusCode < 600
-          callback new ServerError(body.message, 500)
+          return callback err
+
+        if response.statusCode >= 400 and response.statusCode < 500
+          callback new ClientError(body.message or body, response.statusCode)
+        if response.statusCode >= 500 and response.statusCode < 600
+          callback new ServerError(body.message or body, response.statusCode)
         else
           callback null, body
 
@@ -44,18 +50,19 @@ class FuzzyIOClient
 
       request.get options, (err, response, body) =>
 
-        if _.isString(body)
+        if err
+          return callback err
+
+        if response.headers['content-type'] == "application/json"
           try
             body = JSON.parse(body)
           catch e
-            err = e
+            return callback e
 
-        if err
-          callback err
-        else if response.statusCode >= 400 and response.statusCode < 500
-          callback new ClientError(body.message, response.statusCode)
-        else if response.statusCode >= 500 and response.statusCode < 600
-          callback new ServerError(body.message, 500)
+        if response.statusCode >= 400 and response.statusCode < 500
+          callback new ClientError(body.message or body, response.statusCode)
+        if response.statusCode >= 500 and response.statusCode < 600
+          callback new ServerError(body.message or body, response.statusCode)
         else
           callback null, body
 
@@ -74,7 +81,7 @@ class FuzzyIOClient
         else if response.statusCode >= 400 and response.statusCode < 500
           callback new ClientError(body.message, response.statusCode)
         else if response.statusCode >= 500 and response.statusCode < 600
-          callback new ServerError(body.message, 500)
+          callback new ServerError(body.message, response.statusCode)
         else
           callback null, body
 
