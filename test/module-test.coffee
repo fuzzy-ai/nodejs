@@ -64,4 +64,34 @@ vows
                 assert.isArray agents
                 for agent in agents
                   assert.isObject agent
+            'and we add a user agent':
+              topic: (client) ->
+                agent =
+                  inputs:
+                    input1:
+                      veryLow: [0, 20]
+                      low: [5, 25, 45]
+                      medium: [30, 50, 70]
+                      high: [55, 75, 95]
+                      veryHigh: [80, 100]
+                  outputs:
+                    output1:
+                      veryLow: [0, 20]
+                      low: [5, 25, 45]
+                      medium: [30, 50, 70]
+                      high: [55, 75, 95]
+                      veryHigh: [80, 100]
+                  rules: [
+                    "IF input1 IS veryLow THEN output1 IS veryLow"
+                    "IF input1 IS low THEN output1 IS low"
+                    "IF input1 IS medium THEN output1 IS medium"
+                    "IF input1 IS high THEN output1 IS high"
+                    "IF input1 IS veryHigh THEN output1 IS veryHigh"
+                  ]
+                client.newAgent USERID, agent, @callback
+                undefined
+              'it works': (err, agent) ->
+                assert.ifError err
+                assert.isObject agent
+
   .export(module)
