@@ -1,0 +1,20 @@
+{
+  "name": "fuzzy.io",
+  "version": "0.1.0",
+  "main": "lib/fuzzy.io.js",
+  "scripts": {
+    "test": "cake test",
+    "build": "cake build",
+    "prepublish": "cake build",
+    "clean": "cake clean",
+    "install": "mkdir -p lib/ && coffee -b -c -o lib/ src/*.coffee"
+  },
+  "dependencies": {
+    "lodash": "2.4.x",
+    "request": "^2.51.x"
+  },
+  "devDependencies": {
+    "coffee-script": "^1.8.0",
+    "vows": "^0.8.0"
+  }
+}
