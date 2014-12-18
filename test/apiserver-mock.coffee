@@ -15,6 +15,8 @@
 
 http = require 'http'
 
+JSON_TYPE = "application/json; charset=utf-8"
+
 class APIServerMock
   constructor: (userID, token) ->
     ids = []
@@ -46,29 +48,29 @@ class APIServerMock
     routes = [
       ["GET", "^/user/#{userID}/agent$", (request, response, match) ->
         response.statusCode = 200
-        response.setHeader "Content-Type", "application/json"
+        response.setHeader "Content-Type", JSON_TYPE
         response.end JSON.stringify(agents)
       ],
       ["POST", "^/user/#{userID}/agent$", (request, response, match) ->
         response.statusCode = 200
-        response.setHeader "Content-Type", "application/json"
+        response.setHeader "Content-Type", JSON_TYPE
         # XXX: use body
         response.end JSON.stringify(agent1)
       ],
       ["GET", "^/agent/(.*?)$", (request, response, match) ->
         response.statusCode = 200
-        response.setHeader "Content-Type", "application/json"
+        response.setHeader "Content-Type", JSON_TYPE
         # XXX: use body
         response.end JSON.stringify(agent1)
       ],
       ["POST", "^/agent/(.*?)$", (request, response, match) ->
         response.statusCode = 200
-        response.setHeader "Content-Type", "application/json"
+        response.setHeader "Content-Type", JSON_TYPE
         response.end JSON.stringify({fanSpeed: 45.3})
       ],
       ["PUT", "^/agent/(.*?)$", (request, response, match) ->
         response.statusCode = 200
-        response.setHeader "Content-Type", "application/json"
+        response.setHeader "Content-Type", JSON_TYPE
         response.end JSON.stringify(agent1)
       ]
     ]
@@ -79,7 +81,7 @@ class APIServerMock
       am = auth.match(/^Bearer (.*?)$/)
       if not am or am[1] != token
         response.statusCode = 400
-        response.setHeader "Content-Type", "application/json"
+        response.setHeader "Content-Type", JSON_TYPE
         response.end(JSON.stringify({status: "error", message: "Cannot #{request.method} #{request.url}"}))
         return
       # Find a route
@@ -90,7 +92,7 @@ class APIServerMock
             return route[2](request, response, match)
       # If we get here, no route found
       response.statusCode = 404
-      response.setHeader "Content-Type", "application/json"
+      response.setHeader "Content-Type", JSON_TYPE
       response.end(JSON.stringify({status: "error", message: "Cannot #{request.method} #{request.url}"}))
 
     @start = (callback) ->
