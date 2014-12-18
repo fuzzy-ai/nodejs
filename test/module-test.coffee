@@ -100,6 +100,8 @@ vows
                 assert.isArray agents
                 for agent in agents
                   assert.isObject agent
+                  assert.isString agent.id
+                  assert.isString agent.name
             'and we add a user agent':
               topic: (client) ->
                 client.newAgent USERID, AGENT, @callback
