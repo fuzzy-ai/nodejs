@@ -56,6 +56,7 @@ class FuzzyIOClient
 
       options =
         url: full rel
+        json: true
         headers:
           authorization: "Bearer #{token}"
 
@@ -63,12 +64,6 @@ class FuzzyIOClient
 
         if err
           return callback err
-
-        if response.headers['content-type'] == "application/json"
-          try
-            body = JSON.parse(body)
-          catch e
-            return callback e
 
         if response.statusCode >= 400 and response.statusCode < 500
           callback new ClientError(body.message or body, response.statusCode)
