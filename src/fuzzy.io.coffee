@@ -27,69 +27,45 @@ class ServerError extends Error
     Error.captureStackTrace(this, ServerError)
 
 class FuzzyIOClient
+
   constructor: (token, apiServer = "https://api.fuzzy.io") ->
 
     full = (rel) =>
       apiServer + rel
 
-    post = (rel, json, callback) =>
+    handle = (verb) =>
 
-      options =
-        url: full rel
-        json: json
-        headers:
-          authorization: "Bearer #{token}"
+      (rel, body, callback) =>
 
-      request.post options, (err, response, body) =>
+        if !callback
+          callback = body
+          body = undefined
 
-        if err
-          return callback err
+        options =
+          method: verb
+          url: full rel
+          json: true
+          headers:
+            authorization: "Bearer #{token}"
 
-        if response.statusCode >= 400 and response.statusCode < 500
-          callback new ClientError(body.message or body, response.statusCode)
-        if response.statusCode >= 500 and response.statusCode < 600
-          callback new ServerError(body.message or body, response.statusCode)
-        else
-          callback null, body
+        if body
+          options.body = JSON.stringify(body)
 
-    get = (rel, callback) =>
+        request options, (err, response, body) =>
 
-      options =
-        url: full rel
-        json: true
-        headers:
-          authorization: "Bearer #{token}"
+          if err
+            return callback err
 
-      request.get options, (err, response, body) =>
+          if response.statusCode >= 400 and response.statusCode < 500
+            callback new ClientError(body.message or body, response.statusCode)
+          if response.statusCode >= 500 and response.statusCode < 600
+            callback new ServerError(body.message or body, response.statusCode)
+          else
+            callback null, body
 
-        if err
-          return callback err
-
-        if response.statusCode >= 400 and response.statusCode < 500
-          callback new ClientError(body.message or body, response.statusCode)
-        if response.statusCode >= 500 and response.statusCode < 600
-          callback new ServerError(body.message or body, response.statusCode)
-        else
-          callback null, body
-
-    put = (rel, json, callback) =>
-
-      options =
-        method: "PUT"
-        url: full rel
-        json: json
-        headers:
-          authorization: "Bearer #{token}"
-
-      request options, (err, response, body) =>
-        if err
-          callback err
-        else if response.statusCode >= 400 and response.statusCode < 500
-          callback new ClientError(body.message, response.statusCode)
-        else if response.statusCode >= 500 and response.statusCode < 600
-          callback new ServerError(body.message, response.statusCode)
-        else
-          callback null, body
+    post = handle "POST"
+    get = handle "GET"
+    put = handle "PUT"
 
     @getAgents = (userID, callback) =>
       get "/user/#{userID}/agent", callback
