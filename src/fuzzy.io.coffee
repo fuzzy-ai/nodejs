@@ -44,12 +44,9 @@ class FuzzyIOClient
         options =
           method: verb
           url: full rel
-          json: true
+          json: body or true
           headers:
             authorization: "Bearer #{token}"
-
-        if body
-          options.body = JSON.stringify(body)
 
         request options, (err, response, body) =>
 
