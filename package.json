@@ -1,8 +1,12 @@
 {
   "name": "fuzzy.io",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "description": "Interface to fuzzy.io API",
-  "keywords": ["fuzzy", "machine learning", "machine intelligence"],
+  "keywords": [
+    "fuzzy",
+    "machine learning",
+    "machine intelligence"
+  ],
   "homepage": "http://github.com/fuzzy-io/nodejs",
   "bugs": "https://github.com/fuzzy-io/nodejs/issues",
   "license": "Apache-2.0",
@@ -23,7 +27,7 @@
     "vows": "^0.8.0"
   },
   "repository": {
-    "type" : "git",
-    "url" : "http://github.com/fuzzy-io/nodejs.git"
+    "type": "git",
+    "url": "http://github.com/fuzzy-io/nodejs.git"
   }
 }
