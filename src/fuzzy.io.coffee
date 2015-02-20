@@ -67,11 +67,11 @@ class FuzzyIOClient
     get = handle "GET"
     put = handle "PUT"
 
-    @getAgents = (userID, callback) =>
-      get "/user/#{userID}/agent", callback
+    @getAgents = (callback) =>
+      get "/agent", callback
 
-    @newAgent = (userID, agent, callback) =>
-      post "/user/#{userID}/agent", agent, callback
+    @newAgent = (agent, callback) =>
+      post "/agent", agent, callback
 
     @getAgent = (agentID, callback) =>
       get "/agent/#{agentID}", callback

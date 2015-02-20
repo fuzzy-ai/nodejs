@@ -93,7 +93,7 @@ vows
               assert.isFunction client.putAgent, "putAgent"
             'and we get the user agents':
               topic: (client) ->
-                client.getAgents USERID, @callback
+                client.getAgents @callback
                 undefined
               'it works': (err, agents) ->
                 assert.ifError err
@@ -104,7 +104,7 @@ vows
                   assert.isString agent.name
             'and we add a user agent':
               topic: (client) ->
-                client.newAgent USERID, AGENT, @callback
+                client.newAgent AGENT, @callback
                 undefined
               'it works': (err, agent) ->
                 assert.ifError err

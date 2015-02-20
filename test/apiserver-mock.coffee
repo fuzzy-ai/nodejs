@@ -46,12 +46,12 @@ class APIServerMock
       agent1
     ]
     routes = [
-      ["GET", "^/user/#{userID}/agent$", (request, response, match) ->
+      ["GET", "^/agent$", (request, response, match) ->
         response.statusCode = 200
         response.setHeader "Content-Type", JSON_TYPE
         response.end JSON.stringify(agents)
       ],
-      ["POST", "^/user/#{userID}/agent$", (request, response, match) ->
+      ["POST", "^/agent$", (request, response, match) ->
         response.statusCode = 200
         response.setHeader "Content-Type", JSON_TYPE
         # XXX: use body
