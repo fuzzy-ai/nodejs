@@ -62,12 +62,12 @@ This is the main method you need to use:
 
 These might be useful but you normally don't need to mess with them.
 
-* **getAgents(userID, callback)** `userID` is the user ID, *not* the API key.
+* **getAgents(callback)** `userID` is the user ID, *not* the API key.
   `callback` is a function with the signature `function(err, agents)`, where
   `agents` is an array of objects with `id` and `name` properties, one for
   each agent the user has.
 
-* **newAgent(userID, agent, callback)** `userID` is the user ID. `agent` is an
+* **newAgent(agent, callback)** `userID` is the user ID. `agent` is an
   agent object with at least properties `inputs`, `outputs`, `rules`. `callback`
   is a function with the signature `function(err, agent)` which returns the
   fully-realized agent with all its properties like timestamps and IDs.
