@@ -14,7 +14,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-request = require 'request'
+web = require('./web').web
+
+JSON_TYPE = "application/json"
+JSON_FULL_TYPE = "application/json; charset=utf8"
 
 class ClientError extends Error
   constructor: (@message, @statusCode) ->
@@ -41,14 +44,17 @@ class FuzzyIOClient
           callback = body
           body = undefined
 
-        options =
-          method: verb
-          url: full rel
-          json: body or true
-          headers:
-            authorization: "Bearer #{token}"
+        headers =
+          authorization: "Bearer #{token}"
 
-        request options, (err, response, body) =>
+        if body
+          payload = JSON.stringify(body)
+          headers['Content-Type'] = JSON_FULL_TYPE
+          headers['Content-Length'] = Buffer.byteLength payload
+        else
+          payload = null
+
+        web verb, full(rel), headers, payload, (err, response, body) =>
 
           if err
             return callback err
@@ -57,8 +63,17 @@ class FuzzyIOClient
             callback new ClientError(body.message or body, response.statusCode)
           if response.statusCode >= 500 and response.statusCode < 600
             callback new ServerError(body.message or body, response.statusCode)
+          else if (!response.headers['content-type'])
+            console.dir response.headers
+            callback new ServerError("No Content-Type header set")
+          else if (response.headers['content-type'].split(";")[0] != JSON_TYPE)
+            callback new ServerError("Unexpected content type: #{response.headers['content-type']}")
           else
-            callback null, body
+            try
+              results = JSON.parse body
+              callback null, results
+            catch e
+              callback e, null
 
     post = handle "POST"
     get = handle "GET"
