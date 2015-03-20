@@ -51,15 +51,11 @@ web = (verb, url, headers, reqBody, callback) ->
       res.on 'data', (chunk) ->
         resBody = resBody + chunk
       res.on 'error', (err) ->
-        console.log "Results error"
-        console.error err
         callback err, null
       res.on 'end', ->
         callback null, res, resBody
 
     req.on 'error', (err) ->
-      console.log "Request error"
-      console.error err
       callback err, null
 
     if reqBody
