@@ -1,6 +1,6 @@
 {
   "name": "fuzzy.io",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "description": "Interface to fuzzy.io API",
   "keywords": [
     "fuzzy",
