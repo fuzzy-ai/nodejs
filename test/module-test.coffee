@@ -60,8 +60,9 @@ vows
         assert.ifError err
         assert.isObject mock
       'teardown': (mock) ->
+        callback = @callback
         mock.stop (err) =>
-          @callback err
+          callback null
         undefined
       'and we load the fuzzy.io library':
         topic: ->
@@ -126,6 +127,4 @@ vows
               'it works': (err, agent) ->
                 assert.ifError err
                 assert.isObject agent
-
-
   .export(module)
