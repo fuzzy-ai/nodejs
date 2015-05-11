@@ -42,7 +42,7 @@ Overview
     });
 
 FuzzyIOClient
--------------
+--------------
 
 This is the main class; it's what's returned from the require().
 
@@ -77,3 +77,8 @@ These might be useful but you normally don't need to mess with them.
 
 * **putAgent(agentID, agent, callback)** Updates an agent. `callback` has the
   signature `function(err, agent)` which will return the updated version.
+
+* **start()** This is an optional class method that will initialize client-side
+  agents to do connection-pooling and keep-alive.
+
+* **stop()** An optional class method that will clean up client-side agents.
