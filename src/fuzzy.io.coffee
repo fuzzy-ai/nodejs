@@ -14,7 +14,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-web = require('./web').web
+web = require('fuzzy.io-web').web
 
 JSON_TYPE = "application/json"
 JSON_FULL_TYPE = "application/json; charset=utf8"
