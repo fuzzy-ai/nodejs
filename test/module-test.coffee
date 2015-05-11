@@ -75,56 +75,69 @@ vows
         'it works': (err, mod) ->
           assert.ifError err
           assert.isFunction mod
-        'and we create a client with the mock address':
+        'and we start the module':
           topic: (FuzzyIOClient) ->
+            callback = @callback
             try
-              client = new FuzzyIOClient(TOKEN, "http://localhost:2342")
-              @callback null, client
+              FuzzyIOClient.start()
+              callback null, FuzzyIOClient
             catch err
-              @callback err, null
+              callback err
             undefined
-          'it works': (err, client) ->
+          'it works': (err, FuzzyIOClient) ->
             assert.ifError err
-            assert.isObject client
-          'and we examine the client':
-            topic: (client) ->
-              client
-            'it has the right public methods': (client) ->
-              assert.isFunction client.getAgents, "getAgents"
-              assert.isFunction client.newAgent, "newAgent"
-              assert.isFunction client.getAgent, "getAgent"
-              assert.isFunction client.evaluate, "evaluate"
-              assert.isFunction client.putAgent, "putAgent"
-            'and we get the user agents':
+          'teardown': (FuzzyIOClient) ->
+            FuzzyIOClient.stop()
+          'and we create a client with the mock address':
+            topic: (FuzzyIOClient) ->
+              try
+                client = new FuzzyIOClient(TOKEN, "http://localhost:2342")
+                @callback null, client
+              catch err
+                @callback err, null
+              undefined
+            'it works': (err, client) ->
+              assert.ifError err
+              assert.isObject client
+            'and we examine the client':
               topic: (client) ->
-                client.getAgents @callback
-                undefined
-              'it works': (err, agents) ->
-                assert.ifError err
-                assert.isArray agents
-                for agent in agents
+                client
+              'it has the right public methods': (client) ->
+                assert.isFunction client.getAgents, "getAgents"
+                assert.isFunction client.newAgent, "newAgent"
+                assert.isFunction client.getAgent, "getAgent"
+                assert.isFunction client.evaluate, "evaluate"
+                assert.isFunction client.putAgent, "putAgent"
+              'and we get the user agents':
+                topic: (client) ->
+                  client.getAgents @callback
+                  undefined
+                'it works': (err, agents) ->
+                  assert.ifError err
+                  assert.isArray agents
+                  for agent in agents
+                    assert.isObject agent
+                    assert.isString agent.id
+                    assert.isString agent.name
+              'and we add a user agent':
+                topic: (client) ->
+                  client.newAgent AGENT, @callback
+                  undefined
+                'it works': (err, agent) ->
+                  assert.ifError err
                   assert.isObject agent
-                  assert.isString agent.id
-                  assert.isString agent.name
-            'and we add a user agent':
-              topic: (client) ->
-                client.newAgent AGENT, @callback
-                undefined
-              'it works': (err, agent) ->
-                assert.ifError err
-                assert.isObject agent
-            'and we get an agent':
-              topic: (client) ->
-                client.getAgent AGENTID, @callback
-                undefined
-              'it works': (err, agent) ->
-                assert.ifError err
-                assert.isObject agent
-            'and we update an agent':
-              topic: (client) ->
-                client.putAgent AGENTID, AGENT, @callback
-                undefined
-              'it works': (err, agent) ->
-                assert.ifError err
-                assert.isObject agent
+              'and we get an agent':
+                topic: (client) ->
+                  client.getAgent AGENTID, @callback
+                  undefined
+                'it works': (err, agent) ->
+                  assert.ifError err
+                  assert.isObject agent
+              'and we update an agent':
+                topic: (client) ->
+                  client.putAgent AGENTID, AGENT, @callback
+                  undefined
+                'it works': (err, agent) ->
+                  assert.ifError err
+                  assert.isObject agent
   .export(module)

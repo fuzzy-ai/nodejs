@@ -14,7 +14,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-web = require('fuzzy.io-web').web
+webMod = require('fuzzy.io-web')
+web = webMod.web
 
 JSON_TYPE = "application/json"
 JSON_FULL_TYPE = "application/json; charset=utf8"
@@ -30,6 +31,12 @@ class ServerError extends Error
     Error.captureStackTrace(this, ServerError)
 
 class FuzzyIOClient
+
+  @start: () ->
+    webMod.start()
+
+  @stop: () ->
+    webMod.stop()
 
   constructor: (token, apiServer = "https://api.fuzzy.io") ->
 
