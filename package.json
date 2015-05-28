@@ -20,7 +20,7 @@
   },
   "dependencies": {
     "lodash": "2.4.x",
-    "fuzzy.io-web": "0.1.x"
+    "fuzzy.io-web": "0.2.x"
   },
   "devDependencies": {
     "coffee-script": "^1.8.0",
