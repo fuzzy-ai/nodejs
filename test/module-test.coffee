@@ -140,4 +140,11 @@ vows
                 'it works': (err, agent) ->
                   assert.ifError err
                   assert.isObject agent
+              'and we evaluate':
+                topic: (client) ->
+                  client.evaluate AGENTID, {input1: 69}, @callback
+                  undefined
+                'it works': (err, outputs) ->
+                  assert.ifError err
+                  assert.isObject outputs
   .export(module)
