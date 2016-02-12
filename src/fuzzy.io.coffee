@@ -18,7 +18,7 @@ webMod = require('fuzzy.io-web')
 web = webMod.web
 
 JSON_TYPE = "application/json"
-JSON_FULL_TYPE = "application/json; charset=utf8"
+JSON_FULL_TYPE = "application/json; charset=utf-8"
 
 class ClientError extends Error
   constructor: (@message, @statusCode) ->
