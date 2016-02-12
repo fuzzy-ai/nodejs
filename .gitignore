@@ -28,3 +28,5 @@ node_modules
 
 lib/*.js
 test/*.js
+
+*~
