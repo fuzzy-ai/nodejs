@@ -24,7 +24,8 @@
   },
   "devDependencies": {
     "coffee-script": "^1.8.0",
-    "vows": "^0.8.0"
+    "vows": "^0.8.0",
+    "glob": "^7.0.0"
   },
   "repository": {
     "type": "git",
