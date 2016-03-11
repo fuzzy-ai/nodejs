@@ -147,4 +147,5 @@ vows
                 'it works': (err, outputs) ->
                   assert.ifError err
                   assert.isObject outputs
+                  assert.isString outputs._evaluation_id
   .export(module)

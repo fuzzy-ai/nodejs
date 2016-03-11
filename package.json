@@ -20,7 +20,8 @@
   },
   "dependencies": {
     "lodash": "2.4.x",
-    "fuzzy.io-web": "0.2.x"
+    "fuzzy.io-microservice-client": "^0.1.0",
+    "fuzzy.io-web": "^0.2.0"
   },
   "devDependencies": {
     "coffee-script": "^1.8.0",

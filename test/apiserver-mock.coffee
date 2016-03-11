@@ -18,6 +18,7 @@ http = require 'http'
 _ = require 'lodash'
 
 JSON_TYPE = "application/json; charset=utf-8"
+EVALUATION_ID = "ersatzersatz"
 
 class APIServerMock
   constructor: (userID, token) ->
@@ -47,9 +48,11 @@ class APIServerMock
     agents = [
       agent1
     ]
-    resp = (response, code, body) ->
+    resp = (response, code, body, headers={}) ->
       response.statusCode = code
       response.setHeader "Content-Type", JSON_TYPE
+      for name, value in headers
+        response.setHeader name, value
       response.end JSON.stringify(body)
 
     routes = [
@@ -81,7 +84,10 @@ class APIServerMock
         if _.keys(request.body).length == 0
           resp response, 400, {status: "error", message: "Body has no inputs"}
           return
-        resp response, 200, {fanSpeed: 45.3}
+        response.statusCode = 200
+        response.setHeader "Content-Type", JSON_TYPE
+        response.setHeader "X-Evaluation-ID", EVALUATION_ID
+        response.end JSON.stringify({fanSpeed: 45.3})
       ],
       ["PUT", "^/agent/(.*?)$", (request, response, match) ->
         if !_.isObject(request.body)

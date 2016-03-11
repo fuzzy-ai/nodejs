@@ -71,34 +71,42 @@ class FuzzyIOClient
           if response.statusCode >= 500 and response.statusCode < 600
             callback new ServerError(body.message or body, response.statusCode)
           else if (!response.headers['content-type'])
-            console.dir response.headers
             callback new ServerError("No Content-Type header set")
           else if (response.headers['content-type'].split(";")[0] != JSON_TYPE)
             callback new ServerError("Unexpected content type: #{response.headers['content-type']}")
           else
             try
               results = JSON.parse body
-              callback null, results
+              callback null, response, results
             catch e
-              callback e, null
+              callback e
 
     post = handle "POST"
     get = handle "GET"
     put = handle "PUT"
 
     @getAgents = (callback) =>
-      get "/agent", callback
+      get "/agent", (err, response, results) ->
+        callback err, results
 
     @newAgent = (agent, callback) =>
-      post "/agent", agent, callback
+      post "/agent", agent, (err, response, results) ->
+        callback err, results
 
     @getAgent = (agentID, callback) =>
-      get "/agent/#{agentID}", callback
+      get "/agent/#{agentID}", (err, response, results) ->
+        callback err, results
 
     @evaluate = (agentID, inputs, callback) =>
-      post "/agent/#{agentID}", inputs, callback
+      post "/agent/#{agentID}", inputs, (err, response, results) ->
+        if err
+          callback err
+        else
+          results._evaluation_id = response.headers['x-evaluation-id']
+          callback null, results
 
     @putAgent = (agentID, agent, callback) =>
-      put "/agent/#{agentID}", agent, callback
+      put "/agent/#{agentID}", agent, (err, response, results) ->
+        callback err, results
 
 module.exports = FuzzyIOClient
