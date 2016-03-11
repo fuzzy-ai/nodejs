@@ -105,6 +105,14 @@ class FuzzyIOClient
           results._evaluation_id = response.headers['x-evaluation-id']
           callback null, results
 
+    @evaluation = (evaluationID, callback) =>
+      get "/evaluation/#{evaluationID}", (err, response, results) ->
+        callback err, results
+
+    @feedback = (evaluationID, feedback, callback) =>
+      post "/evaluation/#{evaluationID}/feedback", feedback, (err, response, results) ->
+        callback err, results
+
     @putAgent = (agentID, agent, callback) =>
       put "/agent/#{agentID}", agent, (err, response, results) ->
         callback err, results

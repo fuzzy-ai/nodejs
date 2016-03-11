@@ -48,6 +48,37 @@ class APIServerMock
     agents = [
       agent1
     ]
+    evaluation1 =
+      userID: userID
+      agentID: "fakefakefakefake"
+      versionID: "ekafekafekafekaf"
+      input:
+        temperature: 75
+      rules: [
+        1
+        2
+      ]
+      inferred:
+        fanSpeed:
+          slow: 0.3333
+          normal: 0.5555
+          fast: 0.75
+      clipped:
+        fanSpeed:
+          slow: [[0, 0.0], [1, 0.85], [3, 0.85], [4, 0]]
+          normal: [[2, 0.0], [3, 0.85], [5, 0.85], [6, 0]]
+          fast: [[4, 0.0], [7, 0.85], [9, 0.85], [10, 0]]
+      combined:
+        fanSpeed: [
+          [0, 7]
+          [0, 9]
+          [1, 1]
+        ]
+      centroid:
+        fanSpeed: [3.3, 17]
+      crisp:
+        fanSpeed: 17
+
     resp = (response, code, body, headers={}) ->
       response.statusCode = code
       response.setHeader "Content-Type", JSON_TYPE
@@ -88,6 +119,20 @@ class APIServerMock
         response.setHeader "Content-Type", JSON_TYPE
         response.setHeader "X-Evaluation-ID", EVALUATION_ID
         response.end JSON.stringify({fanSpeed: 45.3})
+      ],
+      ["GET", "^/evaluation/(.*?)$", (request, response, match) ->
+        resp response, 200, evaluation1
+      ],
+      ["POST", "^/evaluation/(.*?)/feedback$", (request, response, match) ->
+        if !_.isObject(request.body)
+          resp response, 400, {status: "error", message: "Body not an object"}
+          return
+        if _.keys(request.body).length == 0
+          resp response, 400, {status: "error", message: "Body has no feedback"}
+          return
+        response.statusCode = 200
+        response.setHeader "Content-Type", JSON_TYPE
+        response.end JSON.stringify(request.body)
       ],
       ["PUT", "^/agent/(.*?)$", (request, response, match) ->
         if !_.isObject(request.body)

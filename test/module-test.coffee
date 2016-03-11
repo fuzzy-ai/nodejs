@@ -148,4 +148,19 @@ vows
                   assert.ifError err
                   assert.isObject outputs
                   assert.isString outputs._evaluation_id
+                'and we get the audit information':
+                  topic: (outputs, client) ->
+                    client.evaluation outputs._evaluation_id, @callback
+                    undefined
+                  'it works': (err, evaluation) ->
+                    assert.ifError err
+                    assert.isObject evaluation
+                'and we provide feedback':
+                  topic: (outputs, client) ->
+                    client.feedback outputs._evaluation_id, {size: 13}, @callback
+                    undefined
+                  'it works': (err, feedback) ->
+                    assert.ifError err
+                    assert.isObject feedback
+
   .export(module)
