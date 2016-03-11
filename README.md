@@ -58,7 +58,19 @@ This is the main method you need to use:
   The `inputs` is an object, mapping input names
   to numeric values. `callback` is a function with the signature
   `function(err, outputs)`, where `outputs` is an object mapping output names to
-  numeric values.
+  numeric values. `outputs` also has an `_evaluation_id` member, which is
+  the unique ID for this evaluation.
+
+To train for better results, use the feedback method with your success metric.
+
+* **feedback(evaluationID, metrics, callback)** Trains the agent based on the
+  `evaluationID` is returned in the output for the `evaluate()` method (see above).
+  The `success` is an object, mapping success metric names
+  to numeric values. Defining the success metric is up to you,
+  but closer to zero = better. `callback` is a function with the signature
+  `function(err, metrics)`, where `metrics` is an object mapping output names to
+  numeric values, which is just what you passed in plus some extra housekeeping
+  data.
 
 These might be useful but you normally don't need to mess with them.
 
@@ -77,6 +89,18 @@ These might be useful but you normally don't need to mess with them.
 
 * **putAgent(agentID, agent, callback)** Updates an agent. `callback` has the
   signature `function(err, agent)` which will return the updated version.
+
+* **evaluation(evaluationID, callback)** Gets the audit data for the evaluation.
+  `evaluationID` is returned in the output for the `evaluate()` method (see above).
+  `callback` is a function with the signature `function(err, audit)`,
+  where `audit` is an object mapping audit data names to data. Important values
+  here:
+
+  * `input`: the input values that were passed in
+  * `crisp`: the output values that were the results of the evaluation
+  * `rules`: The index of the rules that fired
+
+  Most of the rest is fuzzy logic stuff that you probably don't care about.
 
 * **start()** This is an optional class method that will initialize client-side
   agents to do connection-pooling and keep-alive.
