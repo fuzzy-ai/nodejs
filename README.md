@@ -53,13 +53,17 @@ This is the main class; it's what's returned from the require().
 
 This is the main method you need to use:
 
-* **evaluate(agentID, inputs, callback)** Does a single inference.
+* **evaluate(agentID, inputs, [meta], callback)** Does a single inference.
   `agentID` is on the main page for the agent on http://fuzzy.io/ .
   The `inputs` is an object, mapping input names
-  to numeric values. `callback` is a function with the signature
-  `function(err, outputs)`, where `outputs` is an object mapping output names to
-  numeric values. `outputs` also has an `_evaluation_id` member, which is
-  the unique ID for this evaluation.
+  to numeric values. `meta` is a string or boolean value; if provided and
+  truthy, `output` will include a `meta` property with meta information, or
+  a property with the same name as the string value, if you need to avoid using
+  "meta" as a property.
+
+  `callback` is a function with the signature `function(err, outputs)`, where
+  `outputs` is an object mapping output names to numeric values. It may also
+  have a `meta` or other specified property depending on the meta flag.
 
 To train for better results, use the feedback method with your success metric.
 

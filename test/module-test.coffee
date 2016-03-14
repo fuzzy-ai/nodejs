@@ -148,16 +148,48 @@ vows
                   assert.ifError err
                   assert.isObject outputs
                   assert.isString outputs._evaluation_id
+              'and we evaluate with the meta flag':
+                topic: (client) ->
+                  client.evaluate AGENTID, {input1: 69}, true, @callback
+                  undefined
+                'it works': (err, outputs) ->
+                  assert.ifError err
+                  assert.isObject outputs
+                  assert.isObject outputs.meta
+                  assert.isString outputs.meta.reqID
                 'and we get the audit information':
                   topic: (outputs, client) ->
-                    client.evaluation outputs._evaluation_id, @callback
+                    client.evaluation outputs.meta.reqID, @callback
                     undefined
                   'it works': (err, evaluation) ->
                     assert.ifError err
                     assert.isObject evaluation
                 'and we provide feedback':
                   topic: (outputs, client) ->
-                    client.feedback outputs._evaluation_id, {size: 13}, @callback
+                    client.feedback outputs.meta.reqID, {size: 13}, @callback
+                    undefined
+                  'it works': (err, feedback) ->
+                    assert.ifError err
+                    assert.isObject feedback
+              'and we evaluate with the meta flag set to a string value':
+                topic: (client) ->
+                  client.evaluate AGENTID, {input1: 69}, 'audit', @callback
+                  undefined
+                'it works': (err, outputs) ->
+                  assert.ifError err
+                  assert.isObject outputs
+                  assert.isObject outputs.audit
+                  assert.isString outputs.audit.reqID
+                'and we get the audit information':
+                  topic: (outputs, client) ->
+                    client.evaluation outputs.audit.reqID, @callback
+                    undefined
+                  'it works': (err, evaluation) ->
+                    assert.ifError err
+                    assert.isObject evaluation
+                'and we provide feedback':
+                  topic: (outputs, client) ->
+                    client.feedback outputs.audit.reqID, {size: 13}, @callback
                     undefined
                   'it works': (err, feedback) ->
                     assert.ifError err

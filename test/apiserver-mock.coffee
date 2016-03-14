@@ -14,6 +14,7 @@
 # limitations under the License.
 
 http = require 'http'
+urlparse = require('url').parse
 
 _ = require 'lodash'
 
@@ -49,6 +50,7 @@ class APIServerMock
       agent1
     ]
     evaluation1 =
+      reqID: EVALUATION_ID
       userID: userID
       agentID: "fakefakefakefake"
       versionID: "ekafekafekafekaf"
@@ -115,10 +117,18 @@ class APIServerMock
         if _.keys(request.body).length == 0
           resp response, 400, {status: "error", message: "Body has no inputs"}
           return
+        parsed = urlparse request.url, true
         response.statusCode = 200
         response.setHeader "Content-Type", JSON_TYPE
         response.setHeader "X-Evaluation-ID", EVALUATION_ID
-        response.end JSON.stringify({fanSpeed: 45.3})
+        results = {fanSpeed: 45.3}
+        if parsed.query.meta?
+          if parsed.query.meta in ["true", "1", "yes"]
+            prop = 'meta'
+          else
+            prop = parsed.query.meta
+          results[prop] = _.omit(evaluation1, "userID", "agentID", "versionID", "input", "crisp")
+        response.end JSON.stringify(results)
       ],
       ["GET", "^/evaluation/(.*?)$", (request, response, match) ->
         resp response, 200, evaluation1

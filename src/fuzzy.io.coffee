@@ -14,6 +14,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+_ = require 'lodash'
+
 webMod = require('fuzzy.io-web')
 web = webMod.web
 
@@ -97,11 +99,22 @@ class FuzzyIOClient
       get "/agent/#{agentID}", (err, response, results) ->
         callback err, results
 
-    @evaluate = (agentID, inputs, callback) =>
-      post "/agent/#{agentID}", inputs, (err, response, results) ->
+    @evaluate = (agentID, inputs, meta, callback) =>
+      if !callback?
+        callback = meta
+        meta = false
+      if _.isString meta
+        url = "/agent/#{agentID}?meta=#{meta}"
+      else if meta
+        url = "/agent/#{agentID}?meta=true"
+      else
+        url = "/agent/#{agentID}"
+      post url, inputs, (err, response, results) ->
         if err
           callback err
         else
+          # This is the old way we used to pass this; leaving it here
+          # since it's mostly harmless
           results._evaluation_id = response.headers['x-evaluation-id']
           callback null, results
 
