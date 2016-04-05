@@ -94,6 +94,11 @@ These might be useful but you normally don't need to mess with them.
 * **putAgent(agentID, agent, callback)** Updates an agent. `callback` has the
   signature `function(err, agent)` which will return the updated version.
 
+* **deleteAgent(agentID, callback)** Deletes an agent. This method will
+  permanently delete an agent and all related data; use with caution. `callback`
+  has the signature `function(err)` which returns an error if there was a
+  problem.
+
 * **evaluation(evaluationID, callback)** Gets the audit data for the evaluation.
   `evaluationID` is returned in the output for the `evaluate()` method (see above).
   `callback` is a function with the signature `function(err, audit)`,

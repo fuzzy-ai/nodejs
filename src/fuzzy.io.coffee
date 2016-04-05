@@ -76,16 +76,19 @@ class FuzzyIOClient
             callback new ServerError("No Content-Type header set")
           else if (response.headers['content-type'].split(";")[0] != JSON_TYPE)
             callback new ServerError("Unexpected content type: #{response.headers['content-type']}")
-          else
+          else if body.length > 0
             try
               results = JSON.parse body
               callback null, response, results
             catch e
               callback e
+          else
+            callback null, response, null
 
     post = handle "POST"
     get = handle "GET"
     put = handle "PUT"
+    del = handle "DELETE"
 
     @getAgents = (callback) =>
       get "/agent", (err, response, results) ->
@@ -129,5 +132,9 @@ class FuzzyIOClient
     @putAgent = (agentID, agent, callback) =>
       put "/agent/#{agentID}", agent, (err, response, results) ->
         callback err, results
+
+    @deleteAgent = (agentID, callback) =>
+      del "/agent/#{agentID}", (err) ->
+        callback err
 
 module.exports = FuzzyIOClient

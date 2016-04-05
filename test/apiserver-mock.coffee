@@ -158,6 +158,9 @@ class APIServerMock
           resp response, 400, {status: "error", message: "Body has no rules"}
           return
         resp response, 200, agent1
+      ],
+      ["DELETE", "^/agent/(.*?)$", (request, response, match) ->
+        resp response, 200, {message: "OK"}
       ]
     ]
 
@@ -184,7 +187,7 @@ class APIServerMock
         if am[1] != token
           respond 403, {status: "error", message: "Incorrect token in Authorization header (#{am[1]} != #{token})"}
           return
-        if request.method != "GET"
+        if request.method in ["PUT", "POST"]
           if body.length == 0
             respond 400, {status: "error", message: "No content in request"}
             return

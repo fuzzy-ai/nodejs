@@ -23,6 +23,8 @@ assert = require 'assert'
 USERID = 'ersatz1234'
 TOKEN = 'madeup5678'
 AGENTID = 'spurious9101'
+AGENTID2 = 'notreal1121'
+
 AGENT =
   inputs:
     input1:
@@ -108,6 +110,7 @@ vows
                 assert.isFunction client.getAgent, "getAgent"
                 assert.isFunction client.evaluate, "evaluate"
                 assert.isFunction client.putAgent, "putAgent"
+                assert.isFunction client.deleteAgent, "deleteAgent"
               'and we get the user agents':
                 topic: (client) ->
                   client.getAgents @callback
@@ -140,6 +143,12 @@ vows
                 'it works': (err, agent) ->
                   assert.ifError err
                   assert.isObject agent
+              'and we delete an agent':
+                topic: (client) ->
+                  client.deleteAgent AGENTID2, @callback
+                  undefined
+                'it works': (err) ->
+                  assert.ifError err
               'and we evaluate':
                 topic: (client) ->
                   client.evaluate AGENTID, {input1: 69}, @callback
