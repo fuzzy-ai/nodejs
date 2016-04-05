@@ -156,7 +156,6 @@ vows
                 'it works': (err, outputs) ->
                   assert.ifError err
                   assert.isObject outputs
-                  assert.isString outputs._evaluation_id
               'and we evaluate with the meta flag':
                 topic: (client) ->
                   client.evaluate AGENTID, {input1: 69}, true, @callback
