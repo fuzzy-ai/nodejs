@@ -16,125 +16,58 @@
 
 _ = require 'lodash'
 
-webMod = require('fuzzy.io-web')
-web = webMod.web
+MicroserviceClient = require 'fuzzy.io-microservice-client'
 
-JSON_TYPE = "application/json"
-JSON_FULL_TYPE = "application/json; charset=utf-8"
-
-class ClientError extends Error
-  constructor: (@message, @statusCode) ->
-    @name = "ClientError"
-    Error.captureStackTrace(this, ClientError)
-
-class ServerError extends Error
-  constructor: (@message, @statusCode) ->
-    @name = "ServerError"
-    Error.captureStackTrace(this, ServerError)
-
-class FuzzyIOClient
+class FuzzyIOClient extends MicroserviceClient
 
   @start: () ->
-    webMod.start()
+    undefined
 
   @stop: () ->
-    webMod.stop()
+    undefined
 
-  constructor: (token, apiServer = "https://api.fuzzy.io") ->
+  constructor: (token, apiServer = "https://api.fuzzy.io", queueLength = 32, maxWait = 10) ->
+    super apiServer, token, queueLength, maxWait
 
-    full = (rel) =>
-      apiServer + rel
+  getAgents: (callback) ->
+    @get "/agent", callback
 
-    handle = (verb) =>
+  newAgent: (agent, callback) ->
+    @post "/agent", agent, callback
 
-      (rel, body, callback) =>
+  getAgent: (agentID, callback) ->
+    @get "/agent/#{agentID}", callback
 
-        if !callback
-          callback = body
-          body = undefined
-
-        headers =
-          authorization: "Bearer #{token}"
-
-        if body
-          payload = JSON.stringify(body)
-          headers['Content-Type'] = JSON_FULL_TYPE
-          headers['Content-Length'] = Buffer.byteLength payload
-        else
-          payload = null
-
-        web verb, full(rel), headers, payload, (err, response, body) =>
-
-          if err
-            return callback err
-
-          if response.statusCode >= 400 and response.statusCode < 500
-            callback new ClientError(body.message or body, response.statusCode)
-          if response.statusCode >= 500 and response.statusCode < 600
-            callback new ServerError(body.message or body, response.statusCode)
-          else if (!response.headers['content-type'])
-            callback new ServerError("No Content-Type header set")
-          else if (response.headers['content-type'].split(";")[0] != JSON_TYPE)
-            callback new ServerError("Unexpected content type: #{response.headers['content-type']}")
-          else if body.length > 0
-            try
-              results = JSON.parse body
-              callback null, response, results
-            catch e
-              callback e
-          else
-            callback null, response, null
-
-    post = handle "POST"
-    get = handle "GET"
-    put = handle "PUT"
-    del = handle "DELETE"
-
-    @getAgents = (callback) =>
-      get "/agent", (err, response, results) ->
-        callback err, results
-
-    @newAgent = (agent, callback) =>
-      post "/agent", agent, (err, response, results) ->
-        callback err, results
-
-    @getAgent = (agentID, callback) =>
-      get "/agent/#{agentID}", (err, response, results) ->
-        callback err, results
-
-    @evaluate = (agentID, inputs, meta, callback) =>
-      if !callback?
-        callback = meta
-        meta = false
-      if _.isString meta
-        url = "/agent/#{agentID}?meta=#{meta}"
-      else if meta
-        url = "/agent/#{agentID}?meta=true"
-      else
-        url = "/agent/#{agentID}"
-      post url, inputs, (err, response, results) ->
-        if err
-          callback err
-        else
-          # This is the old way we used to pass this; leaving it here
-          # since it's mostly harmless
-          results._evaluation_id = response.headers['x-evaluation-id']
-          callback null, results
-
-    @evaluation = (evaluationID, callback) =>
-      get "/evaluation/#{evaluationID}", (err, response, results) ->
-        callback err, results
-
-    @feedback = (evaluationID, feedback, callback) =>
-      post "/evaluation/#{evaluationID}/feedback", feedback, (err, response, results) ->
-        callback err, results
-
-    @putAgent = (agentID, agent, callback) =>
-      put "/agent/#{agentID}", agent, (err, response, results) ->
-        callback err, results
-
-    @deleteAgent = (agentID, callback) =>
-      del "/agent/#{agentID}", (err) ->
+  evaluate: (agentID, inputs, meta, callback) ->
+    if !callback?
+      callback = meta
+      meta = false
+    if _.isString meta
+      url = "/agent/#{agentID}?meta=#{meta}"
+    else if meta
+      url = "/agent/#{agentID}?meta=true"
+    else
+      url = "/agent/#{agentID}"
+    @post url, inputs, (err, results) ->
+      if err
         callback err
+      else
+        # This is the old way we used to pass this; leaving it here
+        # since it's mostly harmless
+        results._evaluation_id = null
+        callback null, results
+
+  evaluation: (evaluationID, callback) ->
+    @get "/evaluation/#{evaluationID}", callback
+
+  feedback: (evaluationID, feedback, callback) ->
+    @post "/evaluation/#{evaluationID}/feedback", feedback, callback
+
+  putAgent: (agentID, agent, callback) ->
+    @put "/agent/#{agentID}", agent, callback
+
+  deleteAgent: (agentID, callback) ->
+    @delete "/agent/#{agentID}", (err, results) ->
+      callback err
 
 module.exports = FuzzyIOClient
