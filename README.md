@@ -46,10 +46,19 @@ FuzzyIOClient
 
 This is the main class; it's what's returned from the require().
 
-* **FuzzyIOClient(apiKey, apiRoot)** You have to get an `apiKey` from
-  http://fuzzy.io/ . Keep this secret, by the way. `serverRoot` is the root of
-  the API server. It has the correct default 'https://api.fuzzy.io' but if
-  you're doing some testing with a mock, it can be useful.
+* **FuzzyIOClient(apiKey[, apiRoot[, queueLength[, maxWait]]])** You have to
+  get an `apiKey` from https://fuzzy.io/ . Keep this secret, by the way.
+
+  `serverRoot` is the root of the API server. It has the correct default
+  'https://api.fuzzy.io' but if you're doing some testing with a mock, it can be
+  useful.
+
+  `queueLength` is the length of the request queue; requests are parallelized
+  and a maximum of this number of requests will be done concurrently. This has
+  a reasonable default of 32.
+
+  `maxWait` is the maximum time in seconds to wait for a response before
+  returning an error. This has a reasonable default of 10 seconds.
 
 This is the main method you need to use:
 
