@@ -161,6 +161,9 @@ class APIServerMock
       ],
       ["DELETE", "^/agent/(.*?)$", (request, response, match) ->
         resp response, 200, {message: "OK"}
+      ],
+      ["GET", "^/version$", (request, response, match) ->
+        resp response, 200, {name: "apiserver-mock", version: "0.24.0", controllerVersion: "0.13.0"}
       ]
     ]
 
@@ -177,16 +180,18 @@ class APIServerMock
         respond 500, {status: "error", message: err.message}
       request.on "end", () ->
         auth = request.headers.authorization
-        if !auth
-          respond 403, {status: "error", message: "No Authorization header"}
-          return
-        am = auth.match(/^Bearer (.*?)$/)
-        if not am
-          respond 403, {status: "error", message: "No token in Authorization header"}
-          return
-        if am[1] != token
-          respond 403, {status: "error", message: "Incorrect token in Authorization header (#{am[1]} != #{token})"}
-          return
+        # No need for auth for /version
+        if request.url != "/version"
+          if !auth
+            respond 403, {status: "error", message: "No Authorization header"}
+            return
+          am = auth.match(/^Bearer (.*?)$/)
+          if not am
+            respond 403, {status: "error", message: "No token in Authorization header"}
+            return
+          if am[1] != token
+            respond 403, {status: "error", message: "Incorrect token in Authorization header (#{am[1]} != #{token})"}
+            return
         if request.method in ["PUT", "POST"]
           if body.length == 0
             respond 400, {status: "error", message: "No content in request"}

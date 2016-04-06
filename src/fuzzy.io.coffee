@@ -70,4 +70,7 @@ class FuzzyIOClient extends MicroserviceClient
     @delete "/agent/#{agentID}", (err, results) ->
       callback err
 
+  apiVersion: (callback) ->
+    @get "/version", callback
+
 module.exports = FuzzyIOClient

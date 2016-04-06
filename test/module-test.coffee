@@ -111,6 +111,25 @@ vows
                 assert.isFunction client.evaluate, "evaluate"
                 assert.isFunction client.putAgent, "putAgent"
                 assert.isFunction client.deleteAgent, "deleteAgent"
+                assert.isFunction client.apiVersion, "apiVersion"
+              'and we check the API version':
+                topic: (client) ->
+                  client.apiVersion @callback
+                  undefined
+                'it works': (err, versionData) ->
+                  assert.ifError err
+                'it has the API version number': (err, versionData) ->
+                  assert.ifError err
+                  assert.isObject versionData
+                  assert.isString versionData.version
+                'it has the implementation name': (err, versionData) ->
+                  assert.ifError err
+                  assert.isObject versionData
+                  assert.isString versionData.name
+                'it has the controller version number': (err, versionData) ->
+                  assert.ifError err
+                  assert.isObject versionData
+                  assert.isString versionData.controllerVersion
               'and we get the user agents':
                 topic: (client) ->
                   client.getAgents @callback
