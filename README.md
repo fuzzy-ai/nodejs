@@ -6,7 +6,7 @@ Interface to the fuzzy.io API for machine intelligence.
 License
 -------
 
-Copyright 2014 fuzzy.io <node@fuzzy.io>
+Copyright 2014-2016 fuzzy.io <node@fuzzy.io>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -120,7 +120,11 @@ These might be useful but you normally don't need to mess with them.
 
   Most of the rest is fuzzy logic stuff that you probably don't care about.
 
-* **start()** This is an optional class method that will initialize client-side
-  agents to do connection-pooling and keep-alive.
+* **apiVersion(callback)** Get the version data from the server. This is a good
+  "smoke test" method to see if the server is responding at all. `callback`
+  has the signature `function(err, versionData)`, where `versionData` is an
+  object with the following properties:
 
-* **stop()** An optional class method that will clean up client-side agents.
+  * `name`: name of the API server. Usually `api`.
+  * `version`: (Semver)[http://semver.org/] version for the API server software.
+  * `controllerVersion`: Semver version for the fuzzy controller software.
