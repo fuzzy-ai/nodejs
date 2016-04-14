@@ -112,6 +112,11 @@ vows
                 assert.isFunction client.putAgent, "putAgent"
                 assert.isFunction client.deleteAgent, "deleteAgent"
                 assert.isFunction client.apiVersion, "apiVersion"
+              'it has the inherited EventEmitter methods': (client) ->
+                # There are others; these are commonly-used ones
+                assert.isFunction client.on, "on"
+                assert.isFunction client.once, "once"
+                assert.isFunction client.removeListener, "removeListener"
               'and we check the API version':
                 topic: (client) ->
                   client.apiVersion @callback
