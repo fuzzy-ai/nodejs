@@ -20,10 +20,10 @@ MicroserviceClient = require 'fuzzy.io-microservice-client'
 
 class FuzzyIOClient extends MicroserviceClient
 
-  @start: () ->
+  @start: ->
     undefined
 
-  @stop: () ->
+  @stop: ->
     undefined
 
   constructor: (token, apiServer = "https://api.fuzzy.io", queueLength = 32, maxWait = 10) ->
