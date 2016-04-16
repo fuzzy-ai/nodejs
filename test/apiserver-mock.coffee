@@ -81,7 +81,7 @@ class APIServerMock
       crisp:
         fanSpeed: 17
 
-    resp = (response, code, body, headers={}) ->
+    resp = (response, code, body, headers = {}) ->
       response.statusCode = code
       response.setHeader "Content-Type", JSON_TYPE
       for name, value in headers
@@ -127,7 +127,8 @@ class APIServerMock
             prop = 'meta'
           else
             prop = parsed.query.meta
-          results[prop] = _.omit(evaluation1, "userID", "agentID", "versionID", "input", "crisp")
+          toOmit = ["userID", "agentID", "versionID", "input", "crisp"]
+          results[prop] = _.omit(evaluation1, toOmit)
         response.end JSON.stringify(results)
       ],
       ["GET", "^/evaluation/(.*?)$", (request, response, match) ->
@@ -163,7 +164,10 @@ class APIServerMock
         resp response, 200, {message: "OK"}
       ],
       ["GET", "^/version$", (request, response, match) ->
-        resp response, 200, {name: "apiserver-mock", version: "0.24.0", controllerVersion: "0.13.0"}
+        resp response, 200,
+          name: "apiserver-mock"
+          version: "0.24.0"
+          controllerVersion: "0.13.0"
       ]
     ]
 
@@ -178,7 +182,7 @@ class APIServerMock
         body += chunk
       request.on "error", (err) ->
         respond 500, {status: "error", message: err.message}
-      request.on "end", () ->
+      request.on "end", ->
         auth = request.headers.authorization
         # No need for auth for /version
         if request.url != "/version"
@@ -187,10 +191,14 @@ class APIServerMock
             return
           am = auth.match(/^Bearer (.*?)$/)
           if not am
-            respond 403, {status: "error", message: "No token in Authorization header"}
+            respond 403,
+              status: "error"
+              message: "No token in Authorization header"
             return
           if am[1] != token
-            respond 403, {status: "error", message: "Incorrect token in Authorization header (#{am[1]} != #{token})"}
+            respond 403,
+              status: "error"
+              message: "Bad authorization token (#{am[1]} != #{token})"
             return
         if request.method in ["PUT", "POST"]
           if body.length == 0
@@ -199,7 +207,9 @@ class APIServerMock
 
           type = request.headers['content-type']
           if type.substr(0, "application/json".length) != "application/json"
-            respond 400, {status: "error", message: "Not a JSON request; Content-Type = #{type}"}
+            respond 400,
+              status: "error"
+              message: "Not a JSON request; Content-Type = #{type}"
             return
 
           try
@@ -215,17 +225,19 @@ class APIServerMock
             if match
               return route[2](request, response, match)
         # If we get here, no route found
-        respond 404, {status: "error", message: "Cannot #{request.method} #{request.url}"}
+        respond 404,
+          status: "error"
+          message: "Cannot #{request.method} #{request.url}"
 
     @start = (callback) ->
       server.once 'error', (err) ->
         callback err
-      server.once 'listening', () ->
+      server.once 'listening', ->
         callback null
       server.listen 2342
 
     @stop = (callback) ->
-      server.once 'close', () ->
+      server.once 'close', ->
         callback null
       server.once 'error', (err) ->
         callback err
