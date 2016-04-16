@@ -63,7 +63,7 @@ vows
         assert.isObject mock
       'teardown': (mock) ->
         callback = @callback
-        mock.stop (err) =>
+        mock.stop (err) ->
           callback null
         undefined
       'and we load the fuzzy.io library':
