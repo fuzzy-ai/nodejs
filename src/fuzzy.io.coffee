@@ -26,7 +26,11 @@ class FuzzyIOClient extends MicroserviceClient
   @stop: ->
     undefined
 
-  constructor: (token, apiServer = "https://api.fuzzy.io", queueLength = 32, maxWait = 10) ->
+  constructor: (token, options...) ->
+    [apiServer, queueLength, maxWait] = options
+    apiServer or= "https://api.fuzzy.io"
+    queueLength or= 32
+    maxWait or= 10
     super apiServer, token, queueLength, maxWait
 
   getAgents: (callback) ->
