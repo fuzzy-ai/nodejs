@@ -19,7 +19,7 @@
     "install": "mkdir -p lib/ && coffee -b -c -o lib/ src/*.coffee"
   },
   "dependencies": {
-    "fuzzy.io-microservice-client": "^0.2.2",
+    "fuzzy.io-microservice-client": "^0.2.4",
     "lodash": "^4.8.2"
   },
   "devDependencies": {
