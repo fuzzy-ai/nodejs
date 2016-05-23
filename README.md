@@ -27,7 +27,7 @@ Overview
 
     var apiKey = 'API key from fuzzy.io';
 
-    var client = new FuzzyIOClient(apiKey);
+    var client = new FuzzyIOClient({key: apiKey});
 
     var agentID = 'ID from fuzzy.io';
 
@@ -46,19 +46,29 @@ FuzzyIOClient
 
 This is the main class; it's what's returned from the require().
 
-* **FuzzyIOClient(apiKey[, apiRoot[, queueLength[, maxWait]]])** You have to
-  get an `apiKey` from https://fuzzy.io/ . Keep this secret, by the way.
+* **FuzzyIOClient(options)** Takes an `options` argument. This is an object with
+  the following properties:
 
-  `serverRoot` is the root of the API server. It has the correct default
+  * `key`: API key to use. You have to get an `apiKey` from
+  https://fuzzy.io/ . Keep this secret, by the way.
+
+  * `root` is the root of the API server. It has the correct default
   'https://api.fuzzy.io' but if you're doing some testing with a mock, it can be
   useful.
 
-  `queueLength` is the length of the request queue; requests are parallelized
+  * `queueLength` is the length of the request queue; requests are parallelized
   and a maximum of this number of requests will be done concurrently. This has
   a reasonable default of 32.
 
-  `maxWait` is the maximum time in seconds to wait for a response before
+  * `maxWait` is the maximum time in seconds to wait for a response before
   returning an error. This has a reasonable default of 10 seconds.
+
+  * `timeout` is how long persistent connections will stick around. The default
+  is 0, meaning no persistent connections. If you are going to do a lot of
+  requests, set this to something reasonable, like 1000 or 5000. Infinity means
+  never disconnect (although the server will, eventually). Note that if you use
+  persistent connections, you'll want to use `stop()` at the end of your program
+  so the connections are cleaned up.
 
 This is the main method you need to use:
 
@@ -128,3 +138,6 @@ These might be useful but you normally don't need to mess with them.
   * `name`: name of the API server. Usually `api`.
   * `version`: (Semver)[http://semver.org/] version for the API server software.
   * `controllerVersion`: Semver version for the fuzzy controller software.
+
+* **stop(callback)** Clean up any persistent connections. You only need to call
+  this if you provided a non-zero `timeout` to the constructor.

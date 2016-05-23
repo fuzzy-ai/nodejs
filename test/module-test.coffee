@@ -101,6 +101,11 @@ vows
             'it works': (err, client) ->
               assert.ifError err
               assert.isObject client
+            teardown: (client) ->
+              callback = @callback
+              client.stop (err) ->
+                callback null
+              undefined
             'and we examine the client':
               topic: (client) ->
                 client
@@ -226,5 +231,31 @@ vows
                   'it works': (err, feedback) ->
                     assert.ifError err
                     assert.isObject feedback
+          'and we create a client with a non-zero timeout':
+            topic: (FuzzyIOClient) ->
+              try
+                client = new FuzzyIOClient
+                  key: TOKEN
+                  root: "http://localhost:2342"
+                  timeout: 5000
+                @callback null, client
+              catch err
+                @callback err, null
+              undefined
+            'it works': (err, client) ->
+              assert.ifError err
+              assert.isObject client
+            teardown: (client) ->
+              callback = @callback
+              client.stop (err) ->
+                callback null
+              undefined
+            'and we get an agent':
+              topic: (client) ->
+                client.getAgent AGENTID, @callback
+                undefined
+              'it works': (err, agent) ->
+                assert.ifError err
+                assert.isObject agent
 
   .export(module)

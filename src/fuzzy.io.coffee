@@ -18,6 +18,12 @@ _ = require 'lodash'
 
 MicroserviceClient = require 'fuzzy.io-microservice-client'
 
+defaults =
+  root: "https://api.fuzzy.io"
+  queueLength: 32
+  maxWait: 10
+  timeout: 0
+
 class FuzzyIOClient extends MicroserviceClient
 
   @start: ->
@@ -26,12 +32,25 @@ class FuzzyIOClient extends MicroserviceClient
   @stop: ->
     undefined
 
-  constructor: (token, options...) ->
-    [apiServer, queueLength, maxWait] = options
-    apiServer or= "https://api.fuzzy.io"
-    queueLength or= 32
-    maxWait or= 10
-    super apiServer, token, queueLength, maxWait
+  constructor: (args...) ->
+
+    if args.length < 1
+      throw new Exception("At least one argument required")
+
+    if _.isObject args[0]
+      props = args[0]
+    else if _.isString args[0]
+      props = {}
+      _.assign props, defaults
+      props.key = args[0]
+      if args.length > 1
+        props.root = args[1]
+      if args.length > 2
+        props.queueLength = args[2]
+      if args.length > 3
+        props.maxWait = args[3]
+
+    super props
 
   getAgents: (callback) ->
     @get "/agent", callback
