@@ -24,6 +24,7 @@ USERID = 'ersatz1234'
 TOKEN = 'madeup5678'
 AGENTID = 'spurious9101'
 AGENTID2 = 'notreal1121'
+VERSIONID = 'ekafekafekafekaf'
 
 AGENT =
   inputs:
@@ -117,6 +118,7 @@ vows
                 assert.isFunction client.putAgent, "putAgent"
                 assert.isFunction client.deleteAgent, "deleteAgent"
                 assert.isFunction client.apiVersion, "apiVersion"
+                assert.isFunction client.getAgentVersion, "getAgentVersion"
               'it has the inherited EventEmitter methods': (client) ->
                 # There are others; these are commonly-used ones
                 assert.isFunction client.on, "on"
@@ -231,6 +233,27 @@ vows
                   'it works': (err, feedback) ->
                     assert.ifError err
                     assert.isObject feedback
+              'and we get an agent version':
+                topic: (client) ->
+                  client.getAgentVersion VERSIONID, @callback
+                  undefined
+                'it works': (err, version) ->
+                  assert.ifError err
+                'it looks correct': (err, data) ->
+                  assert.ifError err
+                  assert.isObject data
+                  assert.isObject data.inputs
+                  assert.isObject data.outputs
+                  for rule in data.rules
+                    assert.isString rule
+                  assert.isArray data.parsed_rules
+                  for parsed_rule in data.parsed_rules
+                    assert.isObject parsed_rule
+                  assert.isString data.id
+                  assert.isString data.userID
+                  assert.isString data.versionOf
+                  assert.isString data.createdAt
+
           'and we create a client with a non-zero timeout':
             topic: (FuzzyIOClient) ->
               try

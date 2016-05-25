@@ -46,6 +46,62 @@ class APIServerMock
       ]
       createdAt: "2014-12-17T18:18:14.850Z"
       updatedAt: "2014-12-17T18:18:14.850Z"
+    version1 =
+      id: "ekafekafekafekaf"
+      userID: userID
+      versionOf: "fakefakefakefake"
+      inputs:
+        temperature:
+          cold: [50, 75]
+          normal: [50, 75, 85, 100]
+          hot: [85, 100]
+      outputs:
+        fanSpeed:
+          slow: [50, 100]
+          normal: [50, 100, 150, 200]
+          fast: [150, 200]
+      rules: [
+        "IF temperature IS cold THEN fanSpeed IS slow"
+        "IF temperature IS normal THEN fanSpeed IS normal"
+        "IF temperature IS hot THEN fanSpeed IS fast"
+      ]
+      parsed_rules: [
+        {
+          type: "if-then"
+          antecedent:
+            type: "is"
+            dimension: "temperature"
+            set: "cold"
+          consequent:
+            type: "is"
+            dimension: "fanSpeed"
+            set: "slow"
+        },
+        {
+          type: "if-then"
+          antecedent:
+            type: "is"
+            dimension: "temperature"
+            set: "normal"
+          consequent:
+            type: "is"
+            dimension: "fanSpeed"
+            set: "normal"
+        },
+        {
+          type: "if-then"
+          antecedent:
+            type: "is"
+            dimension: "temperature"
+            set: "hot"
+          consequent:
+            type: "is"
+            dimension: "fanSpeed"
+            set: "fast"
+        }
+      ]
+
+      createdAt: "2014-12-17T18:18:14.850Z"
     agents = [
       agent1
     ]
@@ -162,6 +218,9 @@ class APIServerMock
       ],
       ["DELETE", "^/agent/(.*?)$", (request, response, match) ->
         resp response, 200, {message: "OK"}
+      ],
+      ["GET", "^/version/(.*?)$", (request, response, match) ->
+        resp response, 200, version1
       ],
       ["GET", "^/version$", (request, response, match) ->
         resp response, 200,

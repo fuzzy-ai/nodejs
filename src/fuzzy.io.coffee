@@ -96,4 +96,7 @@ class FuzzyIOClient extends MicroserviceClient
   apiVersion: (callback) ->
     @get "/version", callback
 
+  getAgentVersion: (id, callback) ->
+    @get "/version/#{id}", callback
+
 module.exports = FuzzyIOClient

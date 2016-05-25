@@ -130,6 +130,9 @@ These might be useful but you normally don't need to mess with them.
 
   Most of the rest is fuzzy logic stuff that you probably don't care about.
 
+* **getAgentVersion(versionID, callback)** For older versions of an agent,
+  you can get the properties of the older version.
+  
 * **apiVersion(callback)** Get the version data from the server. This is a good
   "smoke test" method to see if the server is responding at all. `callback`
   has the signature `function(err, versionData)`, where `versionData` is an
