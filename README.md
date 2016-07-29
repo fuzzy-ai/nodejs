@@ -1,12 +1,12 @@
-fuzzy.io
+fuzzy.ai
 ========
 
-Interface to the fuzzy.io API for machine intelligence.
+Interface to the fuzzy.ai API for machine intelligence.
 
 License
 -------
 
-Copyright 2014-2016 fuzzy.io <node@fuzzy.io>
+Copyright 2014-2016 Fuzzy.ai <node@fuzzy.ai>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -23,13 +23,13 @@ limitations under the License.
 Overview
 --------
 
-    var FuzzyIOClient = require('fuzzy.io');
+    var FuzzyAIClient = require('fuzzy.ai');
 
-    var apiKey = 'API key from fuzzy.io';
+    var apiKey = 'API key from fuzzy.ai';
 
-    var client = new FuzzyIOClient({key: apiKey});
+    var client = new FuzzyAIClient({key: apiKey});
 
-    var agentID = 'ID from fuzzy.io';
+    var agentID = 'ID from fuzzy.ai';
 
     var inputs = {temperature: 87};
 
@@ -41,19 +41,19 @@ Overview
       }
     });
 
-FuzzyIOClient
+FuzzyAIClient
 --------------
 
 This is the main class; it's what's returned from the require().
 
-* **FuzzyIOClient(options)** Takes an `options` argument. This is an object with
+* **FuzzyAIClient(options)** Takes an `options` argument. This is an object with
   the following properties:
 
   * `key`: API key to use. You have to get an `apiKey` from
-  https://fuzzy.io/ . Keep this secret, by the way.
+  https://fuzzy.ai/ . Keep this secret, by the way.
 
   * `root` is the root of the API server. It has the correct default
-  'https://api.fuzzy.io' but if you're doing some testing with a mock, it can be
+  'https://api.fuzzy.ai' but if you're doing some testing with a mock, it can be
   useful.
 
   * `queueLength` is the length of the request queue; requests are parallelized
@@ -73,7 +73,7 @@ This is the main class; it's what's returned from the require().
 This is the main method you need to use:
 
 * **evaluate(agentID, inputs, [meta], callback)** Does a single inference.
-  `agentID` is on the main page for the agent on http://fuzzy.io/ .
+  `agentID` is on the main page for the agent on http://fuzzy.ai/ .
   The `inputs` is an object, mapping input names
   to numeric values. `meta` is a string or boolean value; if provided and
   truthy, `output` will include a `meta` property with meta information, or
@@ -132,7 +132,7 @@ These might be useful but you normally don't need to mess with them.
 
 * **getAgentVersion(versionID, callback)** For older versions of an agent,
   you can get the properties of the older version.
-  
+
 * **apiVersion(callback)** Get the version data from the server. This is a good
   "smoke test" method to see if the server is responding at all. `callback`
   has the signature `function(err, versionData)`, where `versionData` is an

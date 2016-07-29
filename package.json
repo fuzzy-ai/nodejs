@@ -1,16 +1,21 @@
 {
-  "name": "fuzzy.io",
+  "name": "fuzzy.ai",
   "version": "0.11.1",
-  "description": "Interface to fuzzy.io API",
+  "description": "Interface to fuzzy.ai API",
   "keywords": [
     "fuzzy",
     "machine learning",
     "machine intelligence"
   ],
-  "homepage": "http://github.com/fuzzy-io/nodejs",
-  "bugs": "https://github.com/fuzzy-io/nodejs/issues",
+  "homepage": "http://github.com/fuzzy-ai/nodejs",
+  "bugs": "https://github.com/fuzzy-ai/nodejs/issues",
   "license": "Apache-2.0",
-  "main": "lib/fuzzy.io.js",
+  "main": "lib/fuzzy.ai.js",
+  "files": [
+    "lib",
+    "src",
+    "test"
+  ],
   "scripts": {
     "test": "cake test",
     "build": "cake build",
@@ -18,7 +23,7 @@
     "clean": "cake clean"
   },
   "dependencies": {
-    "fuzzy.io-microservice-client": "^0.4.3",
+    "fuzzy.ai-microservice-client": "^0.5.0",
     "lodash": "^4.8.2"
   },
   "devDependencies": {
@@ -28,6 +33,6 @@
   },
   "repository": {
     "type": "git",
-    "url": "http://github.com/fuzzy-io/nodejs.git"
+    "url": "http://github.com/fuzzy-ai/nodejs.git"
   }
 }

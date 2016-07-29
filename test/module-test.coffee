@@ -1,6 +1,6 @@
-# module-test.coffee -- test core functionality of fuzzy.io module
+# module-test.coffee -- test core functionality of fuzzy.ai module
 #
-# Copyright 2014 fuzzy.io <evan@fuzzy.io>
+# Copyright 2014-2016 Fuzzy.ai <node@fuzzy.ai>
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -50,7 +50,7 @@ AGENT =
   ]
 
 vows
-  .describe('Basic fuzzy.io test')
+  .describe('Basic fuzzy.ai test')
   .addBatch
     'When we start the mock server':
       topic: ->
@@ -67,10 +67,10 @@ vows
         mock.stop (err) ->
           callback null
         undefined
-      'and we load the fuzzy.io library':
+      'and we load the fuzzy.ai library':
         topic: ->
           try
-            mod = require '../lib/fuzzy.io'
+            mod = require '../lib/fuzzy.ai'
             @callback null, mod
           catch err
             @callback err, null
@@ -79,22 +79,22 @@ vows
           assert.ifError err
           assert.isFunction mod
         'and we start the module':
-          topic: (FuzzyIOClient) ->
+          topic: (FuzzyAIClient) ->
             callback = @callback
             try
-              FuzzyIOClient.start()
-              callback null, FuzzyIOClient
+              FuzzyAIClient.start()
+              callback null, FuzzyAIClient
             catch err
               callback err
             undefined
-          'it works': (err, FuzzyIOClient) ->
+          'it works': (err, FuzzyAIClient) ->
             assert.ifError err
-          'teardown': (FuzzyIOClient) ->
-            FuzzyIOClient.stop()
+          'teardown': (FuzzyAIClient) ->
+            FuzzyAIClient.stop()
           'and we create a client with the mock address':
-            topic: (FuzzyIOClient) ->
+            topic: (FuzzyAIClient) ->
               try
-                client = new FuzzyIOClient(TOKEN, "http://localhost:2342")
+                client = new FuzzyAIClient(TOKEN, "http://localhost:2342")
                 @callback null, client
               catch err
                 @callback err, null
@@ -255,9 +255,9 @@ vows
                   assert.isString data.createdAt
 
           'and we create a client with a non-zero timeout':
-            topic: (FuzzyIOClient) ->
+            topic: (FuzzyAIClient) ->
               try
-                client = new FuzzyIOClient
+                client = new FuzzyAIClient
                   key: TOKEN
                   root: "http://localhost:2342"
                   timeout: 5000

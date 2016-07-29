@@ -1,6 +1,6 @@
-# Cakefile -- build file for fuzzy.io package
+# Cakefile -- build file for fuzzy.ai package
 #
-# Copyright 2014 fuzzy.io <evan@fuzzy.io>
+# Copyright 2014-2016 Fuzzy.ai <node@fuzzy.ai>
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.

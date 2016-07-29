@@ -1,5 +1,6 @@
-# apiserver-mock.coffee -- mock interface for testing the fuzzy.io class
-# Copyright 2014 fuzzy.io <evan@fuzzy.io>
+# apiserver-mock.coffee -- mock interface for testing the fuzzy.ai class
+#
+# Copyright 2014-2016 Fuzzy.ai <node@fuzzy.ai>
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.

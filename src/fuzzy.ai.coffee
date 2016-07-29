@@ -1,6 +1,6 @@
-# fuzzy.io.coffee -- Interface to fuzzy.io API
+# fuzzy.ai.coffee -- Interface to fuzzy.ai API
 #
-# Copyright 2014 fuzzy.io <evan@fuzzy.io>
+# Copyright 2014-2016 Fuzzy.ai <node@fuzzy.ai>
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -16,15 +16,15 @@
 
 _ = require 'lodash'
 
-MicroserviceClient = require 'fuzzy.io-microservice-client'
+MicroserviceClient = require 'fuzzy.ai-microservice-client'
 
 defaults =
-  root: "https://api.fuzzy.io"
+  root: "https://api.fuzzy.ai"
   queueLength: 32
   maxWait: 10
   timeout: 0
 
-class FuzzyIOClient extends MicroserviceClient
+class FuzzyAIClient extends MicroserviceClient
 
   @start: ->
     undefined
@@ -99,4 +99,4 @@ class FuzzyIOClient extends MicroserviceClient
   getAgentVersion: (id, callback) ->
     @get "/version/#{id}", callback
 
-module.exports = FuzzyIOClient
+module.exports = FuzzyAIClient
