@@ -38,7 +38,7 @@ class FuzzyAIClient extends MicroserviceClient
       throw new Exception("At least one argument required")
 
     if _.isObject args[0]
-      props = args[0]
+      props = _.defaults args[0], defaults
     else if _.isString args[0]
       props = {}
       _.assign props, defaults
