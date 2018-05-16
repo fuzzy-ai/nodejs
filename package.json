@@ -23,7 +23,7 @@
     "clean": "cake clean"
   },
   "dependencies": {
-    "fuzzy.ai-microservice-client": "^1.0.2",
+    "@fuzzy-ai/microservice-client": "^1.0.4",
     "lodash": "^4.17.4"
   },
   "devDependencies": {

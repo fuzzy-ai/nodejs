@@ -16,7 +16,7 @@
 
 _ = require 'lodash'
 
-MicroserviceClient = require 'fuzzy.ai-microservice-client'
+MicroserviceClient = require '@fuzzy-ai/microservice-client'
 
 defaults =
   root: "https://api.fuzzy.ai"
