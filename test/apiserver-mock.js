@@ -14,22 +14,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-const http = require('http');
-const urlparse = require('url').parse;
+const http = require('http')
+const urlparse = require('url').parse
 
-const _ = require('lodash');
+const _ = require('lodash')
 
-const JSON_TYPE = "application/json; charset=utf-8";
-const EVALUATION_ID = "ersatzersatz";
+const JSON_TYPE = 'application/json; charset=utf-8'
+const EVALUATION_ID = 'ersatzersatz'
 
 class APIServerMock {
-  constructor(userID, token) {
-    const ids = [];
+  constructor (userID, token) {
+    const ids = []
     const agent1 = {
-      id: "fakefakefakefake",
+      id: 'fakefakefakefake',
       userID,
-      latestVersion: "ekafekafekafekaf",
-      name: "temperature",
+      latestVersion: 'ekafekafekafekaf',
+      name: 'temperature',
       inputs: {
         temperature: {
           cold: [50, 75],
@@ -45,17 +45,17 @@ class APIServerMock {
         }
       },
       rules: [
-        "IF temperature IS cold THEN fanSpeed IS slow",
-        "IF temperature IS normal THEN fanSpeed IS normal",
-        "IF temperature IS hot THEN fanSpeed IS fast"
+        'IF temperature IS cold THEN fanSpeed IS slow',
+        'IF temperature IS normal THEN fanSpeed IS normal',
+        'IF temperature IS hot THEN fanSpeed IS fast'
       ],
-      createdAt: "2014-12-17T18:18:14.850Z",
-      updatedAt: "2014-12-17T18:18:14.850Z"
-    };
+      createdAt: '2014-12-17T18:18:14.850Z',
+      updatedAt: '2014-12-17T18:18:14.850Z'
+    }
     const version1 = {
-      id: "ekafekafekafekaf",
+      id: 'ekafekafekafekaf',
       userID,
-      versionOf: "fakefakefakefake",
+      versionOf: 'fakefakefakefake',
       inputs: {
         temperature: {
           cold: [50, 75],
@@ -71,62 +71,62 @@ class APIServerMock {
         }
       },
       rules: [
-        "IF temperature IS cold THEN fanSpeed IS slow",
-        "IF temperature IS normal THEN fanSpeed IS normal",
-        "IF temperature IS hot THEN fanSpeed IS fast"
+        'IF temperature IS cold THEN fanSpeed IS slow',
+        'IF temperature IS normal THEN fanSpeed IS normal',
+        'IF temperature IS hot THEN fanSpeed IS fast'
       ],
       parsed_rules: [
         {
-          type: "if-then",
+          type: 'if-then',
           antecedent: {
-            type: "is",
-            dimension: "temperature",
-            set: "cold"
+            type: 'is',
+            dimension: 'temperature',
+            set: 'cold'
           },
           consequent: {
-            type: "is",
-            dimension: "fanSpeed",
-            set: "slow"
+            type: 'is',
+            dimension: 'fanSpeed',
+            set: 'slow'
           }
         },
         {
-          type: "if-then",
+          type: 'if-then',
           antecedent: {
-            type: "is",
-            dimension: "temperature",
-            set: "normal"
+            type: 'is',
+            dimension: 'temperature',
+            set: 'normal'
           },
           consequent: {
-            type: "is",
-            dimension: "fanSpeed",
-            set: "normal"
+            type: 'is',
+            dimension: 'fanSpeed',
+            set: 'normal'
           }
         },
         {
-          type: "if-then",
+          type: 'if-then',
           antecedent: {
-            type: "is",
-            dimension: "temperature",
-            set: "hot"
+            type: 'is',
+            dimension: 'temperature',
+            set: 'hot'
           },
           consequent: {
-            type: "is",
-            dimension: "fanSpeed",
-            set: "fast"
+            type: 'is',
+            dimension: 'fanSpeed',
+            set: 'fast'
           }
         }
       ],
 
-      createdAt: "2014-12-17T18:18:14.850Z"
-    };
+      createdAt: '2014-12-17T18:18:14.850Z'
+    }
     const agents = [
       agent1
-    ];
+    ]
     const evaluation1 = {
       reqID: EVALUATION_ID,
       userID,
-      agentID: "fakefakefakefake",
-      versionID: "ekafekafekafekaf",
+      agentID: 'fakefakefakefake',
+      versionID: 'ekafekafekafekaf',
       input: {
         temperature: 75
       },
@@ -161,213 +161,213 @@ class APIServerMock {
       crisp: {
         fanSpeed: 17
       }
-    };
+    }
 
-    const resp = function(response, code, body, headers) {
-      if (headers == null) { headers = {}; }
-      response.statusCode = code;
-      response.setHeader("Content-Type", JSON_TYPE);
+    const resp = function (response, code, body, headers) {
+      if (headers == null) { headers = {} }
+      response.statusCode = code
+      response.setHeader('Content-Type', JSON_TYPE)
       for (let value = 0; value < headers.length; value++) {
-        const name = headers[value];
-        response.setHeader(name, value);
+        const name = headers[value]
+        response.setHeader(name, value)
       }
-      return response.end(JSON.stringify(body));
-    };
+      return response.end(JSON.stringify(body))
+    }
 
     const routes = [
-      ["GET", "^/agent$", (request, response, match) => resp(response, 200, agents)
+      ['GET', '^/agent$', (request, response, match) => resp(response, 200, agents)
       ],
-      ["POST", "^/agent$", function(request, response, match) {
+      ['POST', '^/agent$', function (request, response, match) {
         if (!_.isObject(request.body)) {
-          resp(response, 400, {status: "error", message: "Body not an object"});
-          return;
+          resp(response, 400, {status: 'error', message: 'Body not an object'})
+          return
         }
-        if (!_.has(request.body, "inputs")) {
-          resp(response, 400, {status: "error", message: "Body has no inputs"});
-          return;
+        if (!_.has(request.body, 'inputs')) {
+          resp(response, 400, {status: 'error', message: 'Body has no inputs'})
+          return
         }
-        if (!_.has(request.body, "outputs")) {
-          resp(response, 400, {status: "error", message: "Body has no outputs"});
-          return;
+        if (!_.has(request.body, 'outputs')) {
+          resp(response, 400, {status: 'error', message: 'Body has no outputs'})
+          return
         }
-        if (!_.has(request.body, "rules")) {
-          resp(response, 400, {status: "error", message: "Body has no rules"});
-          return;
+        if (!_.has(request.body, 'rules')) {
+          resp(response, 400, {status: 'error', message: 'Body has no rules'})
+          return
         }
-        return resp(response, 200, agent1);
+        return resp(response, 200, agent1)
       }
       ],
-      ["GET", "^/agent/(.*?)$", (request, response, match) => resp(response, 200, agent1)
+      ['GET', '^/agent/(.*?)$', (request, response, match) => resp(response, 200, agent1)
       ],
-      ["POST", "^/agent/(.*?)$", function(request, response, match) {
+      ['POST', '^/agent/(.*?)$', function (request, response, match) {
         if (!_.isObject(request.body)) {
-          resp(response, 400, {status: "error", message: "Body not an object"});
-          return;
+          resp(response, 400, {status: 'error', message: 'Body not an object'})
+          return
         }
         if (_.keys(request.body).length === 0) {
-          resp(response, 400, {status: "error", message: "Body has no inputs"});
-          return;
+          resp(response, 400, {status: 'error', message: 'Body has no inputs'})
+          return
         }
-        const parsed = urlparse(request.url, true);
-        response.statusCode = 200;
-        response.setHeader("Content-Type", JSON_TYPE);
-        response.setHeader("X-Evaluation-ID", EVALUATION_ID);
-        const results = {fanSpeed: 45.3};
+        const parsed = urlparse(request.url, true)
+        response.statusCode = 200
+        response.setHeader('Content-Type', JSON_TYPE)
+        response.setHeader('X-Evaluation-ID', EVALUATION_ID)
+        const results = {fanSpeed: 45.3}
         if (parsed.query.meta != null) {
-          let prop;
-          if (["true", "1", "yes"].includes(parsed.query.meta)) {
-            prop = 'meta';
+          let prop
+          if (['true', '1', 'yes'].includes(parsed.query.meta)) {
+            prop = 'meta'
           } else {
-            prop = parsed.query.meta;
+            prop = parsed.query.meta
           }
-          const toOmit = ["userID", "agentID", "versionID", "input", "crisp"];
-          results[prop] = _.omit(evaluation1, toOmit);
+          const toOmit = ['userID', 'agentID', 'versionID', 'input', 'crisp']
+          results[prop] = _.omit(evaluation1, toOmit)
         }
-        return response.end(JSON.stringify(results));
+        return response.end(JSON.stringify(results))
       }
       ],
-      ["GET", "^/evaluation/(.*?)$", (request, response, match) => resp(response, 200, evaluation1)
+      ['GET', '^/evaluation/(.*?)$', (request, response, match) => resp(response, 200, evaluation1)
       ],
-      ["POST", "^/evaluation/(.*?)/feedback$", function(request, response, match) {
+      ['POST', '^/evaluation/(.*?)/feedback$', function (request, response, match) {
         if (!_.isObject(request.body)) {
-          resp(response, 400, {status: "error", message: "Body not an object"});
-          return;
+          resp(response, 400, {status: 'error', message: 'Body not an object'})
+          return
         }
         if (_.keys(request.body).length === 0) {
-          resp(response, 400, {status: "error", message: "Body has no feedback"});
-          return;
+          resp(response, 400, {status: 'error', message: 'Body has no feedback'})
+          return
         }
-        response.statusCode = 200;
-        response.setHeader("Content-Type", JSON_TYPE);
-        return response.end(JSON.stringify(request.body));
+        response.statusCode = 200
+        response.setHeader('Content-Type', JSON_TYPE)
+        return response.end(JSON.stringify(request.body))
       }
       ],
-      ["PUT", "^/agent/(.*?)$", function(request, response, match) {
+      ['PUT', '^/agent/(.*?)$', function (request, response, match) {
         if (!_.isObject(request.body)) {
-          resp(response, 400, {status: "error", message: "Body not an object"});
-          return;
+          resp(response, 400, {status: 'error', message: 'Body not an object'})
+          return
         }
-        if (!_.has(request.body, "inputs")) {
-          resp(response, 400, {status: "error", message: "Body has no inputs"});
-          return;
+        if (!_.has(request.body, 'inputs')) {
+          resp(response, 400, {status: 'error', message: 'Body has no inputs'})
+          return
         }
-        if (!_.has(request.body, "outputs")) {
-          resp(response, 400, {status: "error", message: "Body has no outputs"});
-          return;
+        if (!_.has(request.body, 'outputs')) {
+          resp(response, 400, {status: 'error', message: 'Body has no outputs'})
+          return
         }
-        if (!_.has(request.body, "rules")) {
-          resp(response, 400, {status: "error", message: "Body has no rules"});
-          return;
+        if (!_.has(request.body, 'rules')) {
+          resp(response, 400, {status: 'error', message: 'Body has no rules'})
+          return
         }
-        return resp(response, 200, agent1);
+        return resp(response, 200, agent1)
       }
       ],
-      ["DELETE", "^/agent/(.*?)$", (request, response, match) => resp(response, 200, {message: "OK"})
+      ['DELETE', '^/agent/(.*?)$', (request, response, match) => resp(response, 200, {message: 'OK'})
       ],
-      ["GET", "^/version/(.*?)$", (request, response, match) => resp(response, 200, version1)
+      ['GET', '^/version/(.*?)$', (request, response, match) => resp(response, 200, version1)
       ],
-      ["GET", "^/version$", (request, response, match) =>
+      ['GET', '^/version$', (request, response, match) =>
         resp(response, 200, {
-          name: "apiserver-mock",
-          version: "0.24.0",
-          controllerVersion: "0.13.0"
+          name: 'apiserver-mock',
+          version: '0.24.0',
+          controllerVersion: '0.13.0'
         }
         )
-      
-      ]
-    ];
 
-    const server = http.createServer(function(request, response) {
-      let body = "";
-      const respond = function(code, body) {
-        response.statusCode = code;
+      ]
+    ]
+
+    const server = http.createServer((request, response) => {
+      let body = ''
+      const respond = function (code, body) {
+        response.statusCode = code
         if (!response.headersSent) {
-          response.setHeader("Content-Type", JSON_TYPE);
+          response.setHeader('Content-Type', JSON_TYPE)
         }
-        return response.end(JSON.stringify(body));
-      };
-      request.on("data", chunk => body += chunk);
-      request.on("error", err => respond(500, {status: "error", message: err.message}));
-      return request.on("end", function() {
-        const auth = request.headers.authorization;
+        return response.end(JSON.stringify(body))
+      }
+      request.on('data', chunk => body += chunk)
+      request.on('error', err => respond(500, {status: 'error', message: err.message}))
+      return request.on('end', () => {
+        const auth = request.headers.authorization
         // No need for auth for /version
-        if (request.url !== "/version") {
+        if (request.url !== '/version') {
           if (!auth) {
-            respond(403, {status: "error", message: "No Authorization header"});
-            return;
+            respond(403, {status: 'error', message: 'No Authorization header'})
+            return
           }
-          const am = auth.match(/^Bearer (.*?)$/);
+          const am = auth.match(/^Bearer (.*?)$/)
           if (!am) {
             respond(403, {
-              status: "error",
-              message: "No token in Authorization header"
+              status: 'error',
+              message: 'No token in Authorization header'
             }
-            );
-            return;
+            )
+            return
           }
           if (am[1] !== token) {
             respond(403, {
-              status: "error",
+              status: 'error',
               message: `Bad authorization token (${am[1]} != ${token})`
             }
-            );
-            return;
+            )
+            return
           }
         }
-        if (["PUT", "POST"].includes(request.method)) {
+        if (['PUT', 'POST'].includes(request.method)) {
           if (body.length === 0) {
-            respond(400, {status: "error", message: "No content in request"});
-            return;
+            respond(400, {status: 'error', message: 'No content in request'})
+            return
           }
 
-          const type = request.headers['content-type'];
-          if (type.substr(0, "application/json".length) !== "application/json") {
+          const type = request.headers['content-type']
+          if (type.substr(0, 'application/json'.length) !== 'application/json') {
             respond(400, {
-              status: "error",
+              status: 'error',
               message: `Not a JSON request; Content-Type = ${type}`
             }
-            );
-            return;
+            )
+            return
           }
 
           try {
-            request.body = JSON.parse(body);
+            request.body = JSON.parse(body)
           } catch (err) {
-            respond(400, {status: "error", message: err.message});
-            return;
+            respond(400, {status: 'error', message: err.message})
+            return
           }
         }
 
         // Find a route
-        for (let route of Array.from(routes)) {
+        for (const route of Array.from(routes)) {
           if (request.method === route[0]) {
-            const match = request.url.match(route[1]);
+            const match = request.url.match(route[1])
             if (match) {
-              return route[2](request, response, match);
+              return route[2](request, response, match)
             }
           }
         }
         // If we get here, no route found
         return respond(404, {
-          status: "error",
+          status: 'error',
           message: `Cannot ${request.method} ${request.url}`
         }
-        );
-      });
-    });
+        )
+      })
+    })
 
-    this.start = function(callback) {
-      server.once('error', err => callback(err));
-      server.once('listening', () => callback(null));
-      return server.listen(2342);
-    };
+    this.start = function (callback) {
+      server.once('error', err => callback(err))
+      server.once('listening', () => callback(null))
+      return server.listen(2342)
+    }
 
-    this.stop = function(callback) {
-      server.once('close', () => callback(null));
-      server.once('error', err => callback(err));
-      return server.close();
-    };
+    this.stop = function (callback) {
+      server.once('close', () => callback(null))
+      server.once('error', err => callback(err))
+      return server.close()
+    }
   }
 }
 
-module.exports = APIServerMock;
+module.exports = APIServerMock
