@@ -24,7 +24,6 @@ const EVALUATION_ID = 'ersatzersatz'
 
 class APIServerMock {
   constructor (userID, token) {
-    const ids = []
     const agent1 = {
       id: 'fakefakefakefake',
       userID,
@@ -286,8 +285,8 @@ class APIServerMock {
         }
         return response.end(JSON.stringify(body))
       }
-      request.on('data', chunk => body += chunk)
-      request.on('error', err => respond(500, {status: 'error', message: err.message}))
+      request.on('data', chunk => { body += chunk })
+      request.on('error', err => { respond(500, {status: 'error', message: err.message}) })
       return request.on('end', () => {
         const auth = request.headers.authorization
         // No need for auth for /version

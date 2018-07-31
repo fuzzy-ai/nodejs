@@ -6,7 +6,6 @@ module.exports = {
       "prefer-arrow-callback": ["error"],
       "prefer-rest-params": ["error"],
       "prefer-spread": ["error"],
-      "prefer-template": ["error"],
-      "prefer-destructuring": ["error"]
+      "prefer-template": ["error"]
     }
 };

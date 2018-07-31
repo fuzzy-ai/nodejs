@@ -71,7 +71,7 @@ vows
       },
       'teardown' (mock) {
         const { callback } = this
-        mock.stop(err => callback(null))
+        mock.stop(err => callback(err))
         return undefined
       },
       'and we load the fuzzy.ai library': {
@@ -121,7 +121,7 @@ vows
             },
             teardown (client) {
               const { callback } = this
-              client.stop(err => callback(null))
+              client.stop(err => callback(err))
               return undefined
             },
             'and we examine the client': {
@@ -317,8 +317,8 @@ vows
                     assert.isString(rule)
                   }
                   assert.isArray(data.parsed_rules)
-                  for (const parsed_rule of Array.from(data.parsed_rules)) {
-                    assert.isObject(parsed_rule)
+                  for (const parsedRule of Array.from(data.parsed_rules)) {
+                    assert.isObject(parsedRule)
                   }
                   assert.isString(data.id)
                   assert.isString(data.userID)
@@ -349,7 +349,7 @@ vows
             },
             teardown (client) {
               const { callback } = this
-              client.stop(err => callback(null))
+              client.stop(err => callback(err))
               return undefined
             },
             'and we get an agent': {
