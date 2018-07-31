@@ -23,13 +23,13 @@
     "clean": "cake clean"
   },
   "dependencies": {
-    "@fuzzy-ai/microservice-client": "^1.0.4",
-    "lodash": "^4.17.4"
+    "@fuzzy-ai/microservice-client": "^1.0.7",
+    "lodash": "^4.17.10"
   },
   "devDependencies": {
-    "coffee-script": "^1.12.3",
-    "glob": "^7.1.1",
-    "vows": "^0.8.1"
+    "coffee-script": "^1.12.7",
+    "glob": "^7.1.2",
+    "vows": "^0.8.2"
   },
   "repository": {
     "type": "git",
