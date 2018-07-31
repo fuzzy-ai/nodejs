@@ -27,8 +27,6 @@
     "lodash": "^4.17.10"
   },
   "devDependencies": {
-    "coffee-script": "^1.12.7",
-    "glob": "^7.1.2",
     "vows": "^0.8.2"
   },
   "repository": {
