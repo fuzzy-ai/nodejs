@@ -1,6 +1,6 @@
 {
   "name": "fuzzy.ai",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Interface to fuzzy.ai API",
   "keywords": [
     "fuzzy",
@@ -36,7 +36,7 @@
     "type": "git",
     "url": "http://github.com/fuzzy-ai/nodejs.git"
   },
-  "engines" : {
-    "node" : ">=6.0.0"
+  "engines": {
+    "node": ">=6.0.0"
   }
 }
