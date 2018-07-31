@@ -13,14 +13,10 @@
   "main": "lib/fuzzy.ai.js",
   "files": [
     "lib",
-    "src",
     "test"
   ],
   "scripts": {
-    "test": "cake test",
-    "build": "cake build",
-    "prepublish": "cake build",
-    "clean": "cake clean"
+    "test": "vows test/*-test.js"
   },
   "dependencies": {
     "@fuzzy-ai/microservice-client": "^1.0.7",
