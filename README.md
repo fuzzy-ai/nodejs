@@ -3,10 +3,12 @@ fuzzy.ai
 
 Interface to the fuzzy.ai API for machine intelligence.
 
+[![Build Status](https://travis-ci.org/fuzzy-ai/nodejs.svg?branch=master)](https://travis-ci.org/fuzzy-ai/nodejs)
+
 License
 -------
 
-Copyright 2014-2016 Fuzzy.ai <node@fuzzy.ai>
+Copyright 2014-2018 Fuzzy.ai <node@fuzzy.ai>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
