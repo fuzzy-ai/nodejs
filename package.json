@@ -35,5 +35,8 @@
   "repository": {
     "type": "git",
     "url": "http://github.com/fuzzy-ai/nodejs.git"
+  },
+  "engines" : {
+    "node" : ">=6.0.0"
   }
 }
