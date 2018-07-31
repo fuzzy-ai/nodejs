@@ -16,7 +16,8 @@
     "test"
   ],
   "scripts": {
-    "test": "vows test/*-test.js"
+    "test": "vows test/*-test.js",
+    "lint": "eslint lib/*.js test/*.js"
   },
   "dependencies": {
     "@fuzzy-ai/microservice-client": "^1.0.7",
